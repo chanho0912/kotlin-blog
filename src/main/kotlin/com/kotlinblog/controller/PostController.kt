@@ -2,7 +2,9 @@ package com.kotlinblog.controller
 
 import com.kotlinblog.constaant.RestConstants
 import com.kotlinblog.domain.Post
+import com.kotlinblog.repository.PostRepository
 import com.kotlinblog.request.PostCreate
+import com.kotlinblog.response.PostResponse
 import com.kotlinblog.service.PostService
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
@@ -32,7 +34,7 @@ class PostController(
     }
 
     @GetMapping("/{postId}")
-    fun get(@PathVariable postId: Long): Post {
+    fun get(@PathVariable postId: Long): PostResponse {
         return postService.get(postId)
     }
 

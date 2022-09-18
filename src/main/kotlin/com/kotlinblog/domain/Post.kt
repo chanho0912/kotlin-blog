@@ -11,7 +11,7 @@ class Post(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Long? = null,
+    val id: Long? = null,
 
     val title: String,
 
