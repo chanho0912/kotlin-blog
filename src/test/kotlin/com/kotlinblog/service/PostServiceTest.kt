@@ -3,12 +3,14 @@ package com.kotlinblog.service
 import com.kotlinblog.domain.Post
 import com.kotlinblog.repository.PostRepository
 import com.kotlinblog.request.PostCreate
+import com.kotlinblog.response.PostResponse
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 
 @SpringBootTest
 internal class PostServiceTest {
@@ -42,5 +44,26 @@ internal class PostServiceTest {
         val post = sut.get(postId)
 
 
+    }
+
+    @Test
+    fun `글 여러개 조회`() {
+        (1..30).map {
+            PostCreate(
+                title = "찬호 테스트 $it",
+                content = "포르쉐 파나메라 $it",
+            )
+        }.forEach { sut.write(it) }
+
+        val pageable: Pageable = PageRequest.of(
+            0,
+            5,
+            Sort.by(Sort.Direction.DESC, "id")
+        )
+
+
+        val posts: List<PostResponse> = sut.getList(pageable = pageable) // 0번부터 5개 조회
+
+        assertThat(posts).hasSize(5)
     }
 }
